@@ -16,6 +16,8 @@ struct ContentView: View {
     
     @State private var score = 0
     
+    @State private var rounds = 1
+    
     var body: some View {
         NavigationView {
             
@@ -63,9 +65,20 @@ struct ContentView: View {
                 
             }
             .alert(scoreTitle, isPresented: $showingScore) {
-                Button("Continue", action: askQuestion)
+                Button("Abandon", action: {
+                    resetGame()
+                    askQuestion()
+                })
+                let command = (rounds == 8) ? "Retry" : "Continue"
+                Button(command, action: {
+                    if command == "Retry" {
+                        resetGame()
+                    }
+                    askQuestion()
+                })
             } message: {
-                Text("You score is \(score)")
+                let message = (rounds == 8) ? "You final score is \(score)" : "You score is \(score)"
+                Text(message)
             }
             .navigationTitle("Guess The Flag")
             .navigationBarTitleDisplayMode(.inline)
@@ -77,7 +90,7 @@ struct ContentView: View {
             scoreTitle = "Correct"
             score += 1
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong. That's the flag of \(countries[number])"
             score -= 1
         }
         
@@ -85,8 +98,14 @@ struct ContentView: View {
     }
     
     func askQuestion() {
+        rounds += 1
         countries = countries.shuffled()
         correctAnswer = Int.random(in: 0...2)
+    }
+    
+    fileprivate func resetGame() {
+        score = 0
+        rounds = 0
     }
 }
 
