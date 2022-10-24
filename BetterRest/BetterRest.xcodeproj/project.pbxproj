@@ -12,6 +12,7 @@
 		668369B329056CC60005193E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 668369B229056CC60005193E /* Assets.xcassets */; };
 		668369B629056CC60005193E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 668369B529056CC60005193E /* Preview Assets.xcassets */; };
 		668369BD290572640005193E /* Archive1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668369BC290572640005193E /* Archive1.swift */; };
+		66E4DEE22906A210001AF57B /* SleepCalculator.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 66E4DEE12906A210001AF57B /* SleepCalculator.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		668369B229056CC60005193E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		668369B529056CC60005193E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		668369BC290572640005193E /* Archive1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Archive1.swift; sourceTree = "<group>"; };
+		66E4DEE12906A210001AF57B /* SleepCalculator.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = SleepCalculator.mlmodel; path = ../../SleepCalculator.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 				668369B229056CC60005193E /* Assets.xcassets */,
 				668369B429056CC60005193E /* Preview Content */,
 				668369BC290572640005193E /* Archive1.swift */,
+				66E4DEE12906A210001AF57B /* SleepCalculator.mlmodel */,
 			);
 			path = BetterRest;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			files = (
 				668369B129056CC50005193E /* ContentView.swift in Sources */,
 				668369AF29056CC50005193E /* BetterRestApp.swift in Sources */,
+				66E4DEE22906A210001AF57B /* SleepCalculator.mlmodel in Sources */,
 				668369BD290572640005193E /* Archive1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
