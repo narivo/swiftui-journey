@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
             List {
@@ -25,6 +27,10 @@ struct ContentView: View {
                         .textInputAutocapitalization(.never)
                 }
                 
+                Section {
+                    Text("Score: \(score)")
+                }
+                
                 ForEach(usedWords, id: \.self) { word in
                     HStack {
                         Image(systemName: "\(word.count).circle")
@@ -32,12 +38,17 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle(rootWord)
+            .navigationTitle("\(rootWord)")
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(errorMessage)
+            }
+            .toolbar {
+                Button("Restart") {
+                    restartGame()
+                }
             }
         }
     }
@@ -45,7 +56,7 @@ struct ContentView: View {
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard answer.count > 0 else { return }
+        guard answer.count > 3 || answer == rootWord.lowercased() else { return }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original")
@@ -61,6 +72,8 @@ struct ContentView: View {
             wordError(title: "Word not recognized", message: "You can't just make them up, you know!")
             return
         }
+        
+        score += 1
         
         withAnimation {
             usedWords.insert(answer, at: 0)
@@ -78,6 +91,12 @@ struct ContentView: View {
         }
         
         fatalError("could not load start.txt from bundle")
+    }
+    
+    func restartGame() {
+        score = 0
+        usedWords.removeAll(keepingCapacity: true)
+        startGame()
     }
     
     func isOriginal(word: String) -> Bool {
