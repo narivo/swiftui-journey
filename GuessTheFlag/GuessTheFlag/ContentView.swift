@@ -36,10 +36,13 @@ struct ContentView: View {
     
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var rotationAngles = [0.0, 0.0, 0.0]
     
     @State private var score = 0
     
     @State private var rounds = 1
+    
+    @State private var opacityAmounts = [1.0, 1.0, 1.0]
     
     var body: some View {
         NavigationView {
@@ -65,10 +68,20 @@ struct ContentView: View {
                         
                         ForEach(0..<3) { number in
                             Button {
+                                rotationAngles[number] = 360
+                                for i in 0..<3 {
+                                    if number != i {
+                                        opacityAmounts[i] = 0.25
+                                    }
+                                }
                                 flagTapped(number)
                             } label: {
                                 FlagImage(imageName: countries[number])
                             }
+                            .rotation3DEffect(.degrees(rotationAngles[number]), axis: (x: 0, y: 1, z: 0))
+                            .animation(.spring(), value: rotationAngles[number])
+                            .opacity(opacityAmounts[number])
+                            .animation(.easeOut, value: opacityAmounts[number])
                             
                         }
                     }
@@ -121,6 +134,9 @@ struct ContentView: View {
         rounds += 1
         countries = countries.shuffled()
         correctAnswer = Int.random(in: 0...2)
+        
+        rotationAngles = [0.0, 0.0, 0.0]
+        opacityAmounts = [1.0, 1.0, 1.0]
     }
     
     fileprivate func resetGame() {
