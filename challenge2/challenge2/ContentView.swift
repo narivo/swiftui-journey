@@ -16,10 +16,22 @@ struct QuestionGenerator {
     var questions = [Question]()
     
     init(numberOfQuestions: Int, multiplier: Int) {
-        for _ in 1...numberOfQuestions {
-            let x = Int.random(in: 1...12)
+        for x in 1...numberOfQuestions {
             questions.append(Question(title: "What is \(x) x \(multiplier) ?", answer: x * multiplier))
         }
+    }
+    
+    subscript(i: Int) -> Question {
+        get {
+            return questions[i]
+        }
+        set(newValue) {
+            questions[i] = newValue
+        }
+    }
+    
+    var count: Int {
+        return questions.count
     }
 }
 
@@ -30,10 +42,32 @@ struct ContentView: View {
     @State private var numberOfQuestions = 5
     @State private var currentIndex = 1
     @State private var userInput = "1"
+    @State private var isEndgame = false
+    @State private var correctAnswers = 0
     
     let availNumQuestion = [5, 10, 20]
     
-    @State private var questionGenerator = QuestionGenerator(numberOfQuestions: numberOfQuestions, multiplier: multiplier)
+    private var questions: QuestionGenerator {
+        QuestionGenerator(numberOfQuestions: numberOfQuestions, multiplier: multiplier)
+    }
+    
+    private func validateAnswer() {
+        guard currentIndex >= questions.count else {
+            if Int(userInput) == questions[currentIndex].answer {
+                correctAnswers += 1
+            }
+            userInput = ""
+            currentIndex += 1
+            
+            if currentIndex == questions.count {
+                isEndgame = true
+                makeSettings = true
+                currentIndex = 1
+            }
+            
+            return
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -58,9 +92,14 @@ struct ContentView: View {
                     
                     Section("questions") {
                         
-                        Text(questions[currentIndex].title)
+                        let questionTitle = (currentIndex < questions.count) ? questions[currentIndex].title : "End Game"
+                        
+                        Text(questionTitle)
                         
                         TextField("Your input", text: $userInput)
+                            .onSubmit {
+                                validateAnswer()
+                            }
                             .keyboardType(.numberPad)
                     }
                 }
@@ -71,12 +110,22 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItemGroup (placement: .keyboard, content: {
                     Spacer()
-                    
-                    Button("Done") {
-                        
+                    Button {
+                        validateAnswer()
+                    } label: {
+                        Text("Done")
                     }
+
                 })
             }
+            .alert("You got \(correctAnswers + 1) answers right", isPresented: $isEndgame, actions: {
+                Button {
+                    isEndgame = false
+                } label: {
+                    Text("OK")
+                }
+
+            })
         }
         
     }
